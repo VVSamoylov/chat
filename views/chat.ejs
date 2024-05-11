@@ -8,13 +8,13 @@
   <body>
     <div class="container">
       <div class="row">
+        <h1></h1>
       <div class="row">
         <ul class="list-group">
-          <li class="list-group-item active" aria-current="true">An active item</li>
-          <li class="list-group-item">A second item</li>
-          <li class="list-group-item">A third item</li>
-          <li class="list-group-item">A fourth item</li>
-          <li class="list-group-item">And a fifth one</li>
+          <% for (const mes of arrmes) { %>
+            <li class="list-group-item"><span style="color: blue;"><%=mes.login %></span> <span style="color: black; margin-left: 5px; margin-right: 5px;"><%=mes.message %></span> в <%=mes.time%> </li>
+          <% } %>
+
         </ul>
       </div>
 
@@ -24,7 +24,7 @@
             <label for="message" class="visually">Сообщение</label>
             <input type="text" class="form-control" id="message" name="message" placeholder="Введите сообщение">
           </div>
-          <input type="hidden" name="id" value="<%=iduser%>" /> 
+          <input type="hidden" name="id"  value="<%=userid%>" /> 
           <div class="col-auto">
             <button type="submit" class="btn btn-primary mb-3">Отправить</button>
           </div>

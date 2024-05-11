@@ -16,6 +16,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
+  let userid;
   
   let login = req.body['login'];
   let password = req.body['password'];
@@ -27,14 +28,27 @@ router.post('/login', function(req, res, next) {
       return console.error(err.message);
     }
    
-    if(result.rows[0]== undefined){
-      res.render('index', { title: 'Наш чат' });
-      
-    }
-    console.log(result.rows[0].countuser); //id пользователя
-  res.render('chat', { iduser: result.rows[0].countuser });
-})
+    userid = result.rows[0].countuser;
+    console.log(userid); //id пользователя
+  
+});
 
+sql = 'select login, message, to_char(time, \'MM:DD:YYYY\') as time from message m join chatusers c on c.id = m."user" order by m."time" asc';
+
+let arrMessage = [];
+console.log(sql);
+pool.query(sql, [], (err, result) => {
+  if (err) {
+    return console.error(err.message);
+  }
+ console.log('query pool');
+ console.log(result.rows)
+  if(result.rows.length != 0){
+    res.render('chat', { userid: userid, arrmes: result.rows });
+    
+  }
+
+});
 
 });
 
@@ -45,12 +59,33 @@ router.post('/addmessage', function(req, res, next) {
   let userid = req.body['id'];
 
   console.log(message + "  " + userid)
+  let sql = `insert into message  ("time", message, "user") values(localtimestamp, '${message}', '${userid}')`;
+  
+  console.log(sql);
+  pool.query(sql, [], (err, result) => {
+    if (err) {
+      return console.error(err.message);
+    }
+   
+});
 
-  res.render('chat', { iduser: userid });
+sql = 'select login, message, to_char(time, \'MM:DD:YYYY\') as time from message m join chatusers c on c.id = m."user" order by m."time" asc';
 
+let arrMessage = [];
+console.log(sql);
+pool.query(sql, [], (err, result) => {
+  if (err) {
+    return console.error(err.message);
+  }
+ 
+  if(result.rows.length != 0){
+    res.render('chat', {userid: userid, arrmes: result.rows });
+    
+  }
 
 });
 
+});
 
 /*
 insert into message  ("time", message, "user") values(localtimestamp, 'aaaaaa', 1);
