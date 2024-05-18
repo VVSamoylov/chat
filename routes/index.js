@@ -20,18 +20,22 @@ router.post('/login', function(req, res, next) {
   
   let login = req.body['login'];
   let password = req.body['password'];
-  let sql = `select id as countuser from chatusers where login = '${login}' and password  = '${password}'`;
+  let sql = "select id as countuser from chatusers where login = $1 and password  = $2";
   console.log("login = " + login);
   console.log("password = " + password);
-  pool.query(sql, [], (err, result) => {
-    if (err) {
+  try{
+  pool.query(sql, [login, password], (err, result) => {
+     if (err) {
       return console.error(err.message);
-    }
-   
-    userid = result.rows[0].countuser;
-    console.log(userid); //id пользователя
+      }
+      
+      userid = result.rows[0].countuser;
+      console.log(userid); //id пользователя
   
-});
+    });
+  }catch(e){
+    console.log("Авторизация не удалась");
+  }
 
 sql = 'select login, message, to_char(time, \'MM:DD:YYYY\') as time from message m join chatusers c on c.id = m."user" order by m."time" asc';
 
@@ -59,10 +63,10 @@ router.post('/addmessage', function(req, res, next) {
   let userid = req.body['id'];
 
   console.log(message + "  " + userid)
-  let sql = `insert into message  ("time", message, "user") values(localtimestamp, '${message}', '${userid}')`;
+  let sql = 'insert into message  ("time", message, "user") values(localtimestamp, $1, $2)';
   
   console.log(sql);
-  pool.query(sql, [], (err, result) => {
+  pool.query(sql, [message, userid], (err, result) => {
     if (err) {
       return console.error(err.message);
     }
