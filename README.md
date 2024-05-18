@@ -9,5 +9,8 @@ https://www.youtube.com/watch?v=kz23xxukY5s
 https://dzen.ru/kakietoyroki?tab=longs
 
 
-Материал по ORM prizma для работы с базами данных
+Материал по ORM prizma для работы с базами данных\
 https://youtu.be/qLoHEtwNuCE
+
+Работа с базой с помощью SQL\
+https://blog.pagesd.info/2019/10/15/crud-with-express-postgresql-10-steps/
